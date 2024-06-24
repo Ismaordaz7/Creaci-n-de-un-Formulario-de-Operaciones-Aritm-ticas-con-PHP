@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Operaciones Aritméticas</title>
+    <link rel="stylesheet" href="estilo.css">
+    <script>
+        function calcular(event) {
+            event.preventDefault(); 
+
+            var num1 = parseFloat(document.getElementById('num1').value);
+            var num2 = parseFloat(document.getElementById('num2').value);
+            var operacion = document.getElementById('operacion').value;
+            var resultado = document.getElementById('resultado');
+
+            if (isNaN(num1) || isNaN(num2)) {
+                resultado.value = "Error: Ingrese números válidos.";
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "calcular.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    resultado.value = xhr.responseText;
+                }
+            };
+
+            xhr.send("num1=" + num1 + "&num2=" + num2 + "&operacion=" + operacion);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora</h2>
+        <form onsubmit="calcular(event)">
+            <label for="num1">Número 1:</label>
+            <input type="text" id="num1" name="num1" required>
+            
+            <label for="num2">Número 2:</label>
+            <input type="text" id="num2" name="num2" required>
+            
+            <label for="operacion">Operación:</label>
+            <select id="operacion" name="operacion" required>
+                <option value="suma">Suma</option>
+                <option value="resta">Resta</option>
+                <option value="multiplicacion">Multiplicación</option>
+                <option value="division">División</option>
+            </select>
+            
+            <input type="submit" value="Calcular">
+        </form>
+        
+      
+        <input type="text" id="resultado" readonly>
+    </div>
+</body>
+</html>
+
+
